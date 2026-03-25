@@ -1,0 +1,813 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Termeni și Condiții – NotificăriAuto</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --navy: #0d1b2a;
+            --blue-dark: #1b2d45;
+            --blue-mid: #1e3a5f;
+            --accent: #3b82f6;
+            --accent-light: #60a5fa;
+            --gold: #f59e0b;
+            --white: #f8fafc;
+            --gray: #94a3b8;
+            --gray-light: #e2e8f0;
+            --text: #1e293b;
+            --text-soft: #475569;
+            --card-bg: #ffffff;
+            --border: #e2e8f0;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family: 'DM Sans', sans-serif;
+            background: #f1f5f9;
+            color: var(--text);
+            line-height: 1.7;
+        }
+
+        /* HERO */
+        .hero {
+            background: linear-gradient(135deg, #0d1b2a 0%, #1a3a5c 60%, #0f2942 100%);
+            padding: 80px 24px 100px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -10%;
+            width: 500px;
+            height: 500px;
+            background: radial-gradient(circle, rgba(245,158,11,0.1) 0%, transparent 70%);
+            pointer-events: none;
+        }
+
+        .hero::after {
+            content: '';
+            position: absolute;
+            bottom: -30px;
+            left: 0;
+            right: 0;
+            height: 60px;
+            background: #f1f5f9;
+            clip-path: ellipse(55% 100% at 50% 100%);
+        }
+
+        .app-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 50px;
+            padding: 6px 16px;
+            margin-bottom: 24px;
+            backdrop-filter: blur(10px);
+        }
+
+        .app-badge span {
+            font-size: 13px;
+            color: rgba(255,255,255,0.85);
+            font-weight: 500;
+            letter-spacing: 0.5px;
+        }
+
+        .app-badge .dot {
+            width: 8px;
+            height: 8px;
+            background: var(--gold);
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.6; transform: scale(0.85); }
+        }
+
+        .hero h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(32px, 5vw, 56px);
+            color: #ffffff;
+            font-weight: 700;
+            line-height: 1.2;
+            margin-bottom: 12px;
+        }
+
+        .hero h1 span { color: var(--gold); }
+
+        .hero-sub {
+            font-size: 16px;
+            color: rgba(255,255,255,0.6);
+            margin-bottom: 32px;
+        }
+
+        .hero-meta {
+            display: flex;
+            justify-content: center;
+            gap: 24px;
+            flex-wrap: wrap;
+        }
+
+        .hero-meta-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 13px;
+            color: rgba(255,255,255,0.65);
+        }
+
+        /* LAYOUT */
+        .container {
+            max-width: 860px;
+            margin: 0 auto;
+            padding: 48px 24px 80px;
+        }
+
+        /* TOC */
+        .toc {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 28px 32px;
+            margin-bottom: 40px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.05);
+        }
+
+        .toc-title {
+            font-size: 12px;
+            font-weight: 500;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            color: var(--gray);
+            margin-bottom: 16px;
+        }
+
+        .toc ol {
+            list-style: none;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px 24px;
+        }
+
+        @media (max-width: 600px) {
+            .toc ol { grid-template-columns: 1fr; }
+        }
+
+        .toc ol li a {
+            color: var(--accent);
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: color 0.2s;
+        }
+
+        .toc ol li a:hover { color: var(--blue-mid); }
+
+        .toc ol li a::before {
+            content: attr(data-num);
+            font-size: 11px;
+            color: var(--gray);
+            font-weight: 400;
+            min-width: 18px;
+        }
+
+        /* SECTIONS */
+        .section {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 36px 40px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.04);
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.5s ease, transform 0.5s ease;
+        }
+
+        .section.visible { opacity: 1; transform: translateY(0); }
+
+        @media (max-width: 600px) {
+            .section { padding: 24px 20px; }
+        }
+
+        .section-header {
+            display: flex;
+            align-items: flex-start;
+            gap: 16px;
+            margin-bottom: 20px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid var(--gray-light);
+        }
+
+        .section-num {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, #f59e0b, #d97706);
+            border-radius: 10px;
+            font-size: 14px;
+            font-weight: 700;
+            color: white;
+            margin-top: 2px;
+        }
+
+        .section h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 22px;
+            font-weight: 700;
+            color: var(--navy);
+            line-height: 1.3;
+        }
+
+        .section h3 {
+            font-size: 15px;
+            font-weight: 600;
+            color: var(--blue-mid);
+            margin: 20px 0 8px;
+        }
+
+        .section p {
+            font-size: 15px;
+            color: var(--text-soft);
+            margin-bottom: 12px;
+            line-height: 1.75;
+        }
+
+        .section p:last-child { margin-bottom: 0; }
+
+        .bullet-list {
+            list-style: none;
+            margin: 8px 0 16px;
+        }
+
+        .bullet-list li {
+            font-size: 15px;
+            color: var(--text-soft);
+            padding: 6px 0 6px 24px;
+            position: relative;
+            line-height: 1.65;
+        }
+
+        .bullet-list li::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 14px;
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: var(--gold);
+        }
+
+        .bullet-list li strong {
+            color: var(--text);
+            font-weight: 600;
+        }
+
+        /* HIGHLIGHT BOX */
+        .highlight-box {
+            background: #fffbeb;
+            border-left: 3px solid var(--gold);
+            border-radius: 0 8px 8px 0;
+            padding: 14px 18px;
+            margin: 16px 0;
+        }
+
+        .highlight-box p {
+            font-size: 14px;
+            color: #92400e;
+            margin: 0;
+        }
+
+        .highlight-box-blue {
+            background: #eff6ff;
+            border-left: 3px solid var(--accent);
+            border-radius: 0 8px 8px 0;
+            padding: 14px 18px;
+            margin: 16px 0;
+        }
+
+        .highlight-box-blue p {
+            font-size: 14px;
+            color: #1e40af;
+            margin: 0;
+        }
+
+        .highlight-box-red {
+            background: #fef2f2;
+            border-left: 3px solid #ef4444;
+            border-radius: 0 8px 8px 0;
+            padding: 14px 18px;
+            margin: 16px 0;
+        }
+
+        .highlight-box-red p {
+            font-size: 14px;
+            color: #991b1b;
+            margin: 0;
+        }
+
+        /* CONTACT BOX */
+        .contact-box {
+            background: linear-gradient(135deg, var(--navy), var(--blue-mid));
+            border-radius: 12px;
+            padding: 24px;
+            margin-top: 16px;
+            color: white;
+        }
+
+        .contact-box .contact-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 10px;
+            font-size: 14px;
+        }
+
+        .contact-box .contact-row:last-child { margin-bottom: 0; }
+
+        .contact-box .label {
+            font-weight: 600;
+            color: rgba(255,255,255,0.6);
+            min-width: 80px;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .contact-box a {
+            color: var(--accent-light);
+            text-decoration: none;
+        }
+
+        /* NUMBERED STEPS */
+        .steps {
+            counter-reset: steps;
+            margin: 12px 0;
+        }
+
+        .step {
+            counter-increment: steps;
+            display: flex;
+            gap: 14px;
+            align-items: flex-start;
+            padding: 12px 0;
+            border-bottom: 1px solid var(--gray-light);
+        }
+
+        .step:last-child { border-bottom: none; }
+
+        .step-num {
+            min-width: 28px;
+            height: 28px;
+            background: linear-gradient(135deg, #f59e0b, #d97706);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: 700;
+            color: white;
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+
+        .step p {
+            margin: 0;
+            font-size: 14px;
+            color: var(--text-soft);
+        }
+
+        /* FOOTER */
+        footer {
+            background: var(--navy);
+            color: rgba(255,255,255,0.5);
+            text-align: center;
+            padding: 32px 24px;
+            font-size: 13px;
+        }
+
+        footer strong { color: rgba(255,255,255,0.85); }
+
+        footer .footer-links {
+            margin-top: 10px;
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        footer .footer-links a {
+            color: rgba(255,255,255,0.5);
+            text-decoration: none;
+            font-size: 13px;
+            transition: color 0.2s;
+        }
+
+        footer .footer-links a:hover { color: rgba(255,255,255,0.85); }
+
+        /* BACK TO TOP */
+        .back-to-top {
+            position: fixed;
+            bottom: 28px;
+            right: 28px;
+            width: 44px;
+            height: 44px;
+            background: var(--gold);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 16px rgba(245,158,11,0.4);
+            opacity: 0;
+            transform: translateY(10px);
+            transition: opacity 0.3s, transform 0.3s;
+            z-index: 100;
+        }
+
+        .back-to-top.show { opacity: 1; transform: translateY(0); }
+        .back-to-top:hover { background: #d97706; }
+    </style>
+</head>
+<body>
+
+<!-- HERO -->
+<div class="hero" id="top">
+    <div class="app-badge">
+        <div class="dot"></div>
+        <span>NotificăriAuto – ITP, RCA, ROV</span>
+    </div>
+    <h1>Termeni și <span>Condiții</span></h1>
+    <p class="hero-sub">Vă rugăm să citiți cu atenție înainte de a utiliza Aplicația</p>
+    <div class="hero-meta">
+        <div class="hero-meta-item">
+            <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
+            Ultima actualizare: 25 martie 2026
+        </div>
+        <div class="hero-meta-item">
+            <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+            Valabil în România
+        </div>
+        <div class="hero-meta-item">
+            <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>
+            iOS & Android
+        </div>
+    </div>
+</div>
+
+<!-- CONTENT -->
+<div class="container">
+
+    <!-- TOC -->
+    <div class="toc">
+        <div class="toc-title">Cuprins</div>
+        <ol>
+            <li><a href="#s1" data-num="01.">Acceptarea Termenilor</a></li>
+            <li><a href="#s2" data-num="02.">Descrierea Serviciului</a></li>
+            <li><a href="#s3" data-num="03.">Contul de Utilizator</a></li>
+            <li><a href="#s4" data-num="04.">Utilizarea Permisă</a></li>
+            <li><a href="#s5" data-num="05.">Utilizarea Interzisă</a></li>
+            <li><a href="#s6" data-num="06.">Proprietate Intelectuală</a></li>
+            <li><a href="#s7" data-num="07.">Limitarea Răspunderii</a></li>
+            <li><a href="#s8" data-num="08.">Disponibilitatea Serviciului</a></li>
+            <li><a href="#s9" data-num="09.">Notificările Aplicației</a></li>
+            <li><a href="#s10" data-num="10.">Servicii Terțe</a></li>
+            <li><a href="#s11" data-num="11.">Rezilierea Contului</a></li>
+            <li><a href="#s12" data-num="12.">Modificarea Termenilor</a></li>
+            <li><a href="#s13" data-num="13.">Legea Aplicabilă</a></li>
+            <li><a href="#s14" data-num="14.">Contact</a></li>
+        </ol>
+    </div>
+
+    <!-- 1. Acceptarea -->
+    <div class="section" id="s1">
+        <div class="section-header">
+            <div class="section-num">1</div>
+            <h2>Acceptarea Termenilor</h2>
+        </div>
+        <p>Prin descărcarea, instalarea sau utilizarea aplicației <strong>NotificăriAuto – ITP, RCA, ROV</strong> (denumită în continuare „Aplicația"), confirmați că ați citit, înțeles și acceptat în totalitate prezenții Termeni și Condiții.</p>
+        <div class="highlight-box-red">
+            <p>Dacă nu sunteți de acord cu acești Termeni, vă rugăm să nu utilizați Aplicația și să o dezinstalați de pe dispozitivul dumneavoastră.</p>
+        </div>
+        <p>Acești Termeni constituie un acord juridic între dumneavoastră și operatorul Aplicației. Utilizarea continuă a Aplicației implică acceptarea oricăror modificări aduse acestor Termeni.</p>
+    </div>
+
+    <!-- 2. Descrierea -->
+    <div class="section" id="s2">
+        <div class="section-header">
+            <div class="section-num">2</div>
+            <h2>Descrierea Serviciului</h2>
+        </div>
+        <p><strong>NotificăriAuto – ITP, RCA, ROV</strong> este o aplicație mobilă disponibilă pe platformele iOS și Android, care oferă următoarele funcționalități:</p>
+        <ul class="bullet-list">
+            <li><strong>Gestionarea vehiculelor</strong> – adăugarea și administrarea datelor despre vehiculele personale</li>
+            <li><strong>Notificări de expirare</strong> – alerte pentru expirarea ITP, RCA și Rovinieta</li>
+            <li><strong>Scanarea documentelor</strong> – extragerea automată a datelor din cartea de identitate auto prin tehnologie OCR</li>
+            <li><strong>Garaj personal</strong> – organizarea tuturor vehiculelor într-un singur loc</li>
+            <li><strong>Acces pentru stații ITP</strong> – funcționalități dedicate personalului stațiilor de inspecție tehnică</li>
+        </ul>
+        <div class="highlight-box-blue">
+            <p>Aplicația are caracter informativ. Datele despre expirarea documentelor sunt furnizate cu titlu orientativ și nu înlocuiesc verificarea oficială la autoritățile competente.</p>
+        </div>
+    </div>
+
+    <!-- 3. Contul -->
+    <div class="section" id="s3">
+        <div class="section-header">
+            <div class="section-num">3</div>
+            <h2>Contul de Utilizator</h2>
+        </div>
+        <h3>3.1. Crearea contului</h3>
+        <p>Pentru a utiliza funcționalitățile complete ale Aplicației, trebuie să creați un cont furnizând informații corecte, complete și actualizate. Puteți crea un cont prin:</p>
+        <ul class="bullet-list">
+            <li>Înregistrare cu email și parolă</li>
+            <li>Autentificare prin contul Google</li>
+        </ul>
+
+        <h3>3.2. Responsabilitatea contului</h3>
+        <p>Sunteți responsabil pentru:</p>
+        <ul class="bullet-list">
+            <li>Păstrarea confidențialității credențialelor de autentificare</li>
+            <li>Toate activitățile desfășurate din contul dumneavoastră</li>
+            <li>Notificarea imediată a oricărui acces neautorizat la cont</li>
+        </ul>
+
+        <h3>3.3. Vârsta minimă</h3>
+        <div class="highlight-box">
+            <p>Aplicația este destinată exclusiv persoanelor cu vârsta de minimum <strong>16 ani</strong>. Prin crearea unui cont, confirmați că aveți cel puțin această vârstă.</p>
+        </div>
+    </div>
+
+    <!-- 4. Utilizare permisa -->
+    <div class="section" id="s4">
+        <div class="section-header">
+            <div class="section-num">4</div>
+            <h2>Utilizarea Permisă</h2>
+        </div>
+        <p>Vă acordăm o licență limitată, neexclusivă, netransferabilă și revocabilă pentru a utiliza Aplicația exclusiv în scopuri personale și legale. Puteți:</p>
+        <ul class="bullet-list">
+            <li>Adăuga și gestiona vehiculele personale</li>
+            <li>Primi notificări privind expirarea documentelor auto</li>
+            <li>Scana documentele vehiculelor dumneavoastră</li>
+            <li>Accesa funcționalitățile disponibile pentru tipul contului dumneavoastră</li>
+        </ul>
+    </div>
+
+    <!-- 5. Utilizare interzisa -->
+    <div class="section" id="s5">
+        <div class="section-header">
+            <div class="section-num">5</div>
+            <h2>Utilizarea Interzisă</h2>
+        </div>
+        <p>Este strict interzisă utilizarea Aplicației în următoarele scopuri:</p>
+        <ul class="bullet-list">
+            <li>Furnizarea de informații false, inexacte sau înșelătoare</li>
+            <li>Accesarea neautorizată a conturilor altor utilizatori</li>
+            <li>Orice tentativă de a compromite securitatea Aplicației sau serverelor</li>
+            <li>Utilizarea Aplicației pentru activități ilegale sau frauduloase</li>
+            <li>Copierea, modificarea sau distribuirea codului sursă al Aplicației</li>
+            <li>Utilizarea de roboți, scripturi sau alte metode automate pentru accesarea Aplicației</li>
+            <li>Transmiterea de conținut malițios, spam sau alte materiale dăunătoare</li>
+            <li>Revânzarea sau sublicențierea accesului la Aplicație</li>
+        </ul>
+        <div class="highlight-box-red">
+            <p>Încălcarea acestor prevederi poate duce la suspendarea sau ștergerea imediată a contului și, după caz, la acțiuni legale.</p>
+        </div>
+    </div>
+
+    <!-- 6. Proprietate intelectuala -->
+    <div class="section" id="s6">
+        <div class="section-header">
+            <div class="section-num">6</div>
+            <h2>Proprietate Intelectuală</h2>
+        </div>
+        <p>Toate drepturile de proprietate intelectuală asupra Aplicației, inclusiv dar fără a se limita la codul sursă, design, logo, text, grafică și funcționalități, aparțin exclusiv operatorului Aplicației.</p>
+        <p>Prezenta licență de utilizare nu transferă niciun drept de proprietate intelectuală. Nu aveți dreptul să:</p>
+        <ul class="bullet-list">
+            <li>Copiați, modificați sau distribuiți Aplicația</li>
+            <li>Realizați inginerie inversă (reverse engineering) a Aplicației</li>
+            <li>Utilizați marca sau denumirea Aplicației fără acordul scris prealabil</li>
+            <li>Creați lucrări derivate bazate pe Aplicație</li>
+        </ul>
+    </div>
+
+    <!-- 7. Limitarea raspunderii -->
+    <div class="section" id="s7">
+        <div class="section-header">
+            <div class="section-num">7</div>
+            <h2>Limitarea Răspunderii</h2>
+        </div>
+        <p>Aplicația este furnizată „ca atare" (as-is), fără garanții explicite sau implicite. Nu ne asumăm răspunderea pentru:</p>
+        <ul class="bullet-list">
+            <li>Inexactitățile sau erorile din datele afișate în Aplicație</li>
+            <li>Pierderile sau daunele cauzate de utilizarea sau imposibilitatea de a utiliza Aplicația</li>
+            <li>Întreruperile tehnice, erorile de server sau problemele de conectivitate</li>
+            <li>Deciziile luate pe baza informațiilor furnizate de Aplicație</li>
+            <li>Accesul neautorizat la datele dumneavoastră ca urmare a unor atacuri cibernetice</li>
+        </ul>
+        <div class="highlight-box">
+            <p><strong>Important:</strong> Datele privind expirarea ITP, RCA sau Rovinieta sunt furnizate cu titlu informativ. Verificați întotdeauna documentele oficiale și autoritățile competente (RAR, ASF, CNAIR) pentru informații exacte și actualizate.</p>
+        </div>
+    </div>
+
+    <!-- 8. Disponibilitate -->
+    <div class="section" id="s8">
+        <div class="section-header">
+            <div class="section-num">8</div>
+            <h2>Disponibilitatea Serviciului</h2>
+        </div>
+        <p>Ne străduim să menținem Aplicația disponibilă permanent, însă nu garantăm funcționarea neîntreruptă. Serviciul poate fi temporar indisponibil din cauza:</p>
+        <ul class="bullet-list">
+            <li>Lucrărilor de mentenanță programate sau neprogramate</li>
+            <li>Problemelor tehnice ale furnizorilor de infrastructură</li>
+            <li>Actualizărilor sau îmbunătățirilor aduse Aplicației</li>
+            <li>Evenimentelor de forță majoră</li>
+        </ul>
+        <p>Ne rezervăm dreptul de a modifica, suspenda sau întrerupe orice funcționalitate a Aplicației, cu sau fără notificare prealabilă.</p>
+    </div>
+
+    <!-- 9. Notificari -->
+    <div class="section" id="s9">
+        <div class="section-header">
+            <div class="section-num">9</div>
+            <h2>Notificările Aplicației</h2>
+        </div>
+        <p>Aplicația trimite notificări push pentru a vă alerta cu privire la expirarea documentelor auto. Prin activarea notificărilor, acceptați primirea acestor mesaje.</p>
+        <ul class="bullet-list">
+            <li>Notificările sunt trimise cu titlu informativ și nu constituie o obligație legală din partea noastră</li>
+            <li>Nu garantăm că notificările vor fi trimise întotdeauna la timp sau că vor fi recepționate</li>
+            <li>Puteți dezactiva notificările oricând din setările dispozitivului</li>
+            <li>Dezactivarea notificărilor nu afectează celelalte funcționalități ale Aplicației</li>
+        </ul>
+        <div class="highlight-box">
+            <p>Nu vă bazați exclusiv pe notificările Aplicației pentru a vă reînnoi documentele. Verificați periodic termenele de valabilitate direct pe documente.</p>
+        </div>
+    </div>
+
+    <!-- 10. Servicii terte -->
+    <div class="section" id="s10">
+        <div class="section-header">
+            <div class="section-num">10</div>
+            <h2>Servicii Terțe</h2>
+        </div>
+        <p>Aplicația utilizează servicii terțe pentru a funcționa corespunzător:</p>
+        <ul class="bullet-list">
+            <li><strong>Google Firebase</strong> – notificări push și autentificare</li>
+            <li><strong>Google Vision API</strong> – scanarea și procesarea documentelor</li>
+            <li><strong>Google Sign-In</strong> – autentificare prin cont Google</li>
+            <li><strong>Railway</strong> – infrastructura serverului</li>
+            <li><strong>Resend</strong> – comunicări prin email</li>
+        </ul>
+        <p>Utilizarea acestor servicii este guvernată de propriile lor termeni și condiții. Nu suntem responsabili pentru practicile sau politicile acestor furnizori terți.</p>
+        <div class="highlight-box-blue">
+            <p>Aplicația este disponibilă prin <strong>Apple App Store</strong> și <strong>Google Play Store</strong>. Utilizarea magazinelor de aplicații este supusă termenilor Apple și Google.</p>
+        </div>
+    </div>
+
+    <!-- 11. Reziliere -->
+    <div class="section" id="s11">
+        <div class="section-header">
+            <div class="section-num">11</div>
+            <h2>Rezilierea Contului</h2>
+        </div>
+        <h3>11.1. Reziliere de către utilizator</h3>
+        <p>Puteți solicita ștergerea contului dumneavoastră în orice moment prin:</p>
+        <div class="steps">
+            <div class="step">
+                <div class="step-num">1</div>
+                <p>Contactarea noastră la <strong>alinandrei0303@gmail.com</strong> cu solicitarea de ștergere a contului</p>
+            </div>
+            <div class="step">
+                <div class="step-num">2</div>
+                <p>Vom procesa solicitarea în termen de maximum <strong>30 de zile</strong> și vă vom confirma ștergerea</p>
+            </div>
+            <div class="step">
+                <div class="step-num">3</div>
+                <p>Datele dumneavoastră vor fi șterse conform Politicii de Confidențialitate</p>
+            </div>
+        </div>
+
+        <h3>11.2. Reziliere de către operator</h3>
+        <p>Ne rezervăm dreptul de a suspenda sau șterge contul dumneavoastră dacă:</p>
+        <ul class="bullet-list">
+            <li>Încălcați prezenții Termeni și Condiții</li>
+            <li>Furnizați informații false sau înșelătoare</li>
+            <li>Utilizați Aplicația în scopuri ilegale sau frauduloase</li>
+            <li>Compromiteți securitatea Aplicației sau a altor utilizatori</li>
+        </ul>
+    </div>
+
+    <!-- 12. Modificari -->
+    <div class="section" id="s12">
+        <div class="section-header">
+            <div class="section-num">12</div>
+            <h2>Modificarea Termenilor</h2>
+        </div>
+        <p>Ne rezervăm dreptul de a modifica prezenții Termeni și Condiții oricând. Modificările vor intra în vigoare la publicarea versiunii actualizate în Aplicație sau pe această pagină.</p>
+        <p>Vă vom notifica cu privire la modificările semnificative prin:</p>
+        <ul class="bullet-list">
+            <li>Notificare push în Aplicație</li>
+            <li>Email la adresa asociată contului dumneavoastră</li>
+            <li>Actualizarea datei „Ultima actualizare" din partea de sus a acestei pagini</li>
+        </ul>
+        <div class="highlight-box-blue">
+            <p>Continuarea utilizării Aplicației după intrarea în vigoare a noilor Termeni constituie acceptarea acestora.</p>
+        </div>
+    </div>
+
+    <!-- 13. Legea aplicabila -->
+    <div class="section" id="s13">
+        <div class="section-header">
+            <div class="section-num">13</div>
+            <h2>Legea Aplicabilă și Soluționarea Disputelor</h2>
+        </div>
+        <p>Prezenții Termeni și Condiții sunt guvernați de legislația română în vigoare, inclusiv:</p>
+        <ul class="bullet-list">
+            <li>Codul Civil român</li>
+            <li>Legea nr. 365/2002 privind comerțul electronic</li>
+            <li>Legea nr. 363/2007 privind combaterea practicilor incorecte ale comercianților</li>
+            <li>OUG nr. 34/2014 privind drepturile consumatorilor</li>
+        </ul>
+        <p>Orice dispută sau neînțelegere legată de utilizarea Aplicației va fi soluționată în primul rând pe cale amiabilă. În cazul în care nu se ajunge la o înțelegere, litigiile vor fi supuse jurisdicției instanțelor competente din România.</p>
+        <div class="highlight-box-blue">
+            <p>Consumatorii din UE pot utiliza platforma europeană de soluționare online a litigiilor: <a href="https://ec.europa.eu/consumers/odr" target="_blank" style="color:#1d4ed8;">ec.europa.eu/consumers/odr</a></p>
+        </div>
+    </div>
+
+    <!-- 14. Contact -->
+    <div class="section" id="s14">
+        <div class="section-header">
+            <div class="section-num">14</div>
+            <h2>Contact</h2>
+        </div>
+        <p>Pentru orice întrebări, solicitări sau reclamații legate de acești Termeni și Condiții, ne puteți contacta:</p>
+        <div class="contact-box">
+            <div class="contact-row">
+                <span class="label">Email</span>
+                <a href="mailto:alinandrei0303@gmail.com">alinandrei0303@gmail.com</a>
+            </div>
+            <div class="contact-row">
+                <span class="label">Aplicație</span>
+                <span>NotificăriAuto – ITP, RCA, ROV</span>
+            </div>
+            <div class="contact-row">
+                <span class="label">Răspuns</span>
+                <span>În termen de maximum 30 de zile</span>
+            </div>
+        </div>
+        <p style="margin-top:16px; font-size:13px; color:var(--gray);">De asemenea, puteți consulta <a href="/gdpr" style="color:var(--accent);">Politica de Confidențialitate</a> pentru informații complete despre prelucrarea datelor dumneavoastră cu caracter personal.</p>
+    </div>
+
+</div>
+
+<!-- FOOTER -->
+<footer>
+    <p><strong>NotificăriAuto – ITP, RCA, ROV</strong></p>
+    <div class="footer-links">
+        <a href="/gdpr">Politică de Confidențialitate</a>
+        <a href="mailto:alinandrei0303@gmail.com">Contact</a>
+    </div>
+    <p style="margin-top:12px;">Termeni și Condiții &nbsp;·&nbsp; Valabili din 25 martie 2026 &nbsp;·&nbsp; România</p>
+</footer>
+
+<!-- BACK TO TOP -->
+<button class="back-to-top" id="backToTop" onclick="window.scrollTo({top:0,behavior:'smooth'})" aria-label="Înapoi sus">
+    <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M18 15l-6-6-6 6"/></svg>
+</button>
+
+<script>
+    const sections = document.querySelectorAll('.section');
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) entry.target.classList.add('visible');
+        });
+    }, { threshold: 0.08 });
+    sections.forEach(s => observer.observe(s));
+
+    const btn = document.getElementById('backToTop');
+    window.addEventListener('scroll', () => {
+        btn.classList.toggle('show', window.scrollY > 400);
+    });
+</script>
+
+</body>
+</html>
